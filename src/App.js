@@ -21,8 +21,8 @@ function App() {
   });
 
   // ThingSpeak Channel ID and Read API Key
-  const channelID = '3021426';
-  const readAPIKey = 'Y8W8UMVX9JBDUQCU';
+  const channelID = '2824554';
+  const readAPIKey = 'RFES375XAD85P4TZ';
 
   const calculateAQI = (pm25, pm10) => {
     const breakpoints = {
