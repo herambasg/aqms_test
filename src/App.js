@@ -16,8 +16,8 @@ function App() {
     humidity: '-- %',
     pm25: '-- &mu;g/m³',
     pm10: '-- &mu;g/m³',
-    co: '-- ppm',
     ozone: '-- ppb',
+    co: '-- ppm',
   });
 
   // ThingSpeak Channel ID and Read API Key
@@ -27,7 +27,10 @@ function App() {
   const calculateAQI = (pm25, pm10) => {
     const breakpoints = {
       "PM2.5": [[0,30,0,50],[31,60,51,100],[61,90,101,200],[91,120,201,300],[121,250,301,400],[251,Infinity,401,500]],
-      "PM10": [[0,50,0,50],[51,100,51,100],[101,250,101,200],[251,350,201,300],[351,430,301,400],[431,Infinity,401,500]]
+      "PM10": [[0,50,0,50],[51,100,51,100],[101,250,101,200],[251,350,201,300],[351,430,301,400],[431,Infinity,401,500]],
+      "Ozone": [[0,50,0,50],[51,100,51,100],[101,168,101,200],[169,208,201,300],[209,748,301,400],[749,Infinity,401,500]],
+      "CO": [[0,1,0,50],[1.1,2,51,100],[2.1,10,101,200],[11,17,201,300],[18,34,301,400],[35,Infinity,401,500]]
+
     };
     const getSubIndex = (value, pollutant) => {
       if (isNaN(value)) return 0;
@@ -37,14 +40,14 @@ function App() {
           return Math.round(((Ihigh - Ilow) / (Chigh - Clow)) * (value - Clow) + Ilow);
         }
       }
-      if (value > poll_breakpoints[poll_breakpoints.length - 1][1]) {
-        return poll_breakpoints[poll_breakpoints.length - 1][3];
-      }
       return 0;
     }
     const aqi25 = getSubIndex(pm25, "PM2.5");
     const aqi10 = getSubIndex(pm10, "PM10");
-    const overall = Math.max(aqi25, aqi10);
+    const aqiOzone = getSubIndex(ozone, "Ozone");
+    const aqiCO = getSubIndex(co, "CO");
+
+    const overall = Math.max(aqi25, aqi10, aqiOzone, aqiCO);
     const category = overall <= 50 ? "Good" :
                      overall <= 100 ? "Moderate" :
                      overall <= 200 ? "Poor" :
@@ -77,12 +80,12 @@ function App() {
           humidity: isNaN(humidity) ? "-- %" : `${humidity.toFixed(2)} %`,
           pm25: isNaN(pm25) ? "-- &mu;g/m³" : `${pm25.toFixed(2)} &mu;g/m³`,
           pm10: isNaN(pm10) ? "-- &mu;g/m³" : `${pm10.toFixed(2)} &mu;g/m³`,
-          co: isNaN(co) ? "-- ppm" : `${co.toFixed(2)} ppm`,        // NEW
-          ozone: isNaN(ozone) ? "-- ppb" : `${ozone.toFixed(2)} ppb` // NEW
+          ozone: isNaN(ozone) ? "-- ppb" : `${ozone.toFixed(2)} ppb`,
+          co: isNaN(co) ? "-- ppm" : `${co.toFixed(2)} ppm`
         });
 
-        if (!isNaN(pm25) || !isNaN(pm10)) {
-          const { aqi, category } = calculateAQI(pm25, pm10);
+        if (!isNaN(pm25) || !isNaN(pm10) || !isNaN(ozone) || !isNaN(co)) {
+          const { aqi, category } = calculateAQI(pm25, pm10, ozone, co);
           setAqi(aqi);
           setAqiCategory(category);
         } else {
