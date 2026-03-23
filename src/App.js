@@ -22,39 +22,47 @@ function App() {
   const channelID = '2824554';
   const readAPIKey = 'RFES375XAD85P4TZ';
 
-  // FIX: Added 'ozone' and 'co' to the parameters list
-  const calculateAQI = (pm25, pm10, ozone, co) => {
+  // Aligned with Arduino categories and standard conversions
+  const calculateAQI = (pm25, pm10, ozonePPM, coPPM) => {
+    // Conversion factors: 1 ppm CO ≈ 1.145 mg/m³, 1 ppm Ozone ≈ 1960 µg/m³
+    const ozoneUG = ozonePPM * 1960;
+    const coMG = coPPM * 1.145;
+
     const breakpoints = {
-      "PM2.5": [[0,30,0,50],[31,60,51,100],[61,90,101,200],[91,120,201,300],[121,250,301,400],[251,Infinity,401,500]],
-      "PM10": [[0,50,0,50],[51,100,51,100],[101,250,101,200],[251,350,201,300],[351,430,301,400],[431,Infinity,401,500]],
-      "Ozone": [[0,50,0,50],[51,100,51,100],[101,168,101,200],[169,208,201,300],[209,748,301,400],[749,Infinity,401,500]],
-      "CO": [[0,1,0,50],[1.1,2,51,100],[2.1,10,101,200],[11,17,201,300],[18,34,301,400],[35,Infinity,401,500]]
+      "PM2.5": [[0,30,0,50],[31,60,51,100],[61,90,101,200],[91,120,201,300],[121,250,301,400],[251,500,401,500]],
+      "PM10": [[0,50,0,50],[51,100,51,100],[101,250,101,200],[251,350,201,300],[351,430,301,400],[431,500,401,500]],
+      "Ozone": [[0,50,0,50],[51,100,51,100],[101,168,101,200],[169,208,201,300],[209,748,301,400],[749,1000,401,500]],
+      "CO": [[0,1,0,50],[1.1,2,51,100],[2.1,10,101,200],[11,17,201,300],[18,34,301,400],[35,100,401,500]]
     };
 
     const getSubIndex = (value, pollutant) => {
-      if (isNaN(value)) return 0;
+      if (isNaN(value) || value < 0) return 0;
       const poll_breakpoints = breakpoints[pollutant];
       for (const [Clow, Chigh, Ilow, Ihigh] of poll_breakpoints) {
         if (value >= Clow && value <= Chigh) {
           return Math.round(((Ihigh - Ilow) / (Chigh - Clow)) * (value - Clow) + Ilow);
         }
       }
-      return 0;
+      return value > 500 ? 500 : 0;
     }
 
-    const aqi25 = getSubIndex(pm25, "PM2.5");
-    const aqi10 = getSubIndex(pm10, "PM10");
-    const aqiOzone = getSubIndex(ozone, "Ozone"); // Now defined via parameters
-    const aqiCO = getSubIndex(co, "CO");          // Now defined via parameters
+    const subIndices = [
+      getSubIndex(pm25, "PM2.5"),
+      getSubIndex(pm10, "PM10"),
+      getSubIndex(ozoneUG, "Ozone"),
+      getSubIndex(coMG, "CO")
+    ];
 
-    const overall = Math.max(aqi25, aqi10, aqiOzone, aqiCO);
+    const overall = Math.max(...subIndices);
     
-    const category = overall <= 50 ? "Good" :
-                     overall <= 100 ? "Moderate" :
-                     overall <= 200 ? "Poor" :
-                     overall <= 300 ? "Unhealthy" :
-                     overall <= 400 ? "Severe" :
-                     "Hazardous";
+    // Aligned categories with Arduino code logic
+    let category = "Severe";
+    if (overall <= 50) category = "Good";
+    else if (overall <= 100) category = "Satisfactory";
+    else if (overall <= 200) category = "Moderate";
+    else if (overall <= 300) category = "Poor";
+    else if (overall <= 400) category = "Very Poor";
+
     return { aqi: overall, category: `Air Quality is ${category}` };
   }
 
@@ -72,21 +80,27 @@ function App() {
         const humidity = parseFloat(data.field2);
         const pm25 = parseFloat(data.field3);
         const pm10 = parseFloat(data.field4);
-        const ozone = parseFloat(data.field5); // Ensure these match your ThingSpeak fields
-        const co = parseFloat(data.field6);
+        const ozonePPM = parseFloat(data.field5); // Arduino sends PPM
+        const coPPM = parseFloat(data.field6);    // Arduino sends PPM
+        const hardwareAQI = parseFloat(data.field7); // Pre-calculated on ESP32
 
         setSensorData({
           temperature: isNaN(temp) ? "-- °C" : `${temp.toFixed(2)} °C`,
           humidity: isNaN(humidity) ? "-- %" : `${humidity.toFixed(2)} %`,
           pm25: isNaN(pm25) ? "-- &mu;g/m³" : `${pm25.toFixed(2)} &mu;g/m³`,
           pm10: isNaN(pm10) ? "-- &mu;g/m³" : `${pm10.toFixed(2)} &mu;g/m³`,
-          co: isNaN(co) ? "-- ppm" : `${co.toFixed(2)} ppm`,
-          ozone: isNaN(ozone) ? "-- ppb" : `${ozone.toFixed(2)} ppb`
+          co: isNaN(coPPM) ? "-- ppm" : `${coPPM.toFixed(2)} ppm`,
+          ozone: isNaN(ozonePPM) ? "-- ppb" : `${(ozonePPM * 1000).toFixed(0)} ppb` // Display as ppb (ppm * 1000)
         });
 
-        // FIX: Passing ozone and co to the calculation function
-        if (!isNaN(pm25) || !isNaN(pm10) || !isNaN(ozone) || !isNaN(co)) {
-          const { aqi, category } = calculateAQI(pm25, pm10, ozone, co);
+        // Use Hardware AQI if available, otherwise calculate locally
+        if (!isNaN(hardwareAQI)) {
+          setAqi(Math.round(hardwareAQI));
+          // Use the internal logic to get the text category for that number
+          const { category } = calculateAQI(pm25, pm10, ozonePPM, coPPM);
+          setAqiCategory(category);
+        } else if (!isNaN(pm25)) {
+          const { aqi, category } = calculateAQI(pm25, pm10, ozonePPM, coPPM);
           setAqi(aqi);
           setAqiCategory(category);
         } else {
