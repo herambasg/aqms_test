@@ -24,7 +24,7 @@ function App() {
   const channelID = '2824554';
   const readAPIKey = 'RFES375XAD85P4TZ';
 
-  const calculateAQI = (pm25, pm10) => {
+  const calculateAQI = (pm25, pm10, ozone, co) => {
     const breakpoints = {
       "PM2.5": [[0,30,0,50],[31,60,51,100],[61,90,101,200],[91,120,201,300],[121,250,301,400],[251,Infinity,401,500]],
       "PM10": [[0,50,0,50],[51,100,51,100],[101,250,101,200],[251,350,201,300],[351,430,301,400],[431,Infinity,401,500]],
