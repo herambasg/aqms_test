@@ -112,7 +112,7 @@ function App() {
     // Slide switching interval (every 25 seconds)
     const slideInterval = setInterval(() => {
       setCurrentSlide((prev) => (prev === 0 ? 1 : 0));
-    }, 25000);
+    }, 5000);
 
     return () => {
       clearInterval(dataInterval);
