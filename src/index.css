@@ -29,23 +29,22 @@ header {
   background: linear-gradient(90deg, #02c768, #0369a1);
   color: white;
   text-align: center;
-  padding: 2.5rem;
+  padding: 1.5rem; /* Reduced from 2.5rem to save vertical space */
   border-bottom: 5px solid #02c768;
   position: relative;
-  /* flex-shrink: 0; -- No longer needed in Grid layout */
 }
 
 header h1 {
-  margin-top: -1rem;
-  font-size: 3rem;
+  margin-top: -0.5rem;
+  font-size: 2.5rem; /* Slightly smaller for TV dimensions */
   font-weight: 800;
 }
 
 header p {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   color: #e0f2fe;
-  margin-bottom: -0.5rem;
-  padding-top: 0.5rem;
+  margin-bottom: -0.2rem;
+  padding-top: 0.3rem;
 }
 
 /* --- Logo Styling --- */
@@ -54,19 +53,18 @@ header p {
   top: 50%;
   right: 220px;
   transform: translateY(-50%);
-  height: 130px; /* Adjusted size */
+  height: 100px; /* Adjusted size to match header reduction */
   width: auto;
 }
 
 /* --- Main Content --- */
 main {
-  /* flex-grow: 1; -- No longer needed in Grid layout */
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto 1fr; 
-  gap: 1.5rem;
-  padding: 1.5rem;
-  overflow: hidden; /* Important: Prevents internal scrolling */
+  gap: 1rem; /* Reduced gap */
+  padding: 1rem; /* Reduced padding */
+  overflow: hidden; 
 }
 
 #last-updated {
@@ -74,24 +72,23 @@ main {
   text-align: center;
   color: #64748b;
   font-size: 1.1rem;
-  margin-bottom: -1rem;
-  margin-top: -0.5rem;
+  margin-bottom: -0.5rem;
 }
 
 /* --- Column Styling --- */
 .left-column {
   display: grid; 
   grid-template-columns: 1fr 1fr; 
-  gap: 1.5rem;
+  gap: 1rem;
   height: 100%;
-  overflow: hidden; /* Added precaution */
+  overflow: hidden;
 }
 
 .right-column {
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: hidden; /* Added precaution */
+  overflow: hidden;
 }
 
 .left-column > section {
@@ -109,10 +106,10 @@ section {
 }
 
 section h2 {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 600;
   color: #0369a1;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
   text-align: center;
 }
 
@@ -125,14 +122,14 @@ section h2 {
 }
 
 .main-aqi-card #calculated-aqi {
-  font-size: 6rem; 
+  font-size: 5rem; /* Scaled down to prevent overflow */
   font-weight: 700;
   color: #0f172a;
   line-height: 1;
 }
 
 .main-aqi-card #aqi-category {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 600;
   color: #0f766e;
   text-align: center;
@@ -145,7 +142,7 @@ section h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 150px; 
+  min-height: 120px; 
 }
 
 /* --- Sensor Grid Container (Right Column) --- */
@@ -156,17 +153,22 @@ section h2 {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1.2rem;
-  padding: 1rem;
+  grid-template-columns: repeat(2, 1fr); 
+  grid-template-rows: repeat(4, 1fr); /* Updated to 4 rows to fit 8 cards */  
+  gap: 0.8rem; 
+  height: 100%;
 }
 
 .card {
-  background: #ffffff;
-  padding: 1.2rem;
+  background: #f8fafc;
+  padding: 0.6rem; /* Reduced padding to fit 4 rows */
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  border: 1px solid #e2e8f0;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   transition: transform 0.2s;
 }
 
@@ -175,37 +177,36 @@ section h2 {
 }
 
 .card h3 {
-  font-size: 1rem;
-  color: #555;
-  margin-bottom: 0.5rem;
+  color: #0ea5e9;
+  margin-bottom: 0.3rem;
+  font-size: 0.95rem; /* Balanced for TV display */
+  font-weight: 500;
 }
 
 .card p {
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #2c3e50;
+  font-size: 1.5rem; /* Optimized size for 8-card layout */
+  font-weight: 700;
+  color: #0f172a;
 }
 
 /* --- Footer --- */
 footer {
   text-align: center;
-  padding: 0.60rem;
+  padding: 0.5rem; /* Reduced padding */
   background: #e2e8f0;
   color: #475569;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   border-top: 1px solid #cbd5e1;
-  /* flex-shrink: 0; -- No longer needed in Grid layout */
 }
 
 /* --- Media Queries --- */
-/* Media query for smaller screens to re-enable scrolling */
 @media (max-width: 1200px), (max-height: 700px) {
   html, body {
       height: auto;
       overflow: auto;
   }
   .dashboard-container {
-      display: block; /* Revert to default block display */
+      display: block; 
   }
   main, .left-column {
       grid-template-columns: 1fr;
@@ -219,7 +220,6 @@ footer {
   header { text-align: center; }
 }
 
-/* Media query for television screens */
 @media tv and (min-width: 1920px) {
   main {
     grid-template-columns: 1fr 1fr; 

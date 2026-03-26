@@ -13,8 +13,8 @@ function App() {
   const [sensorData, setSensorData] = useState({
     temperature: '-- °C',
     humidity: '-- %',
-    pm25: '-- µg/m³',
-    pm10: '-- µg/m³',
+    pm25: '-- &mu;g/m³',
+    pm10: '-- &mu;g/m³',
     co: '-- ppm',
     ozone: '-- ppb',
     nh3: '-- ppm',
@@ -24,12 +24,12 @@ function App() {
   const channelID = '2824554';
   const readAPIKey = 'RFES375XAD85P4TZ';
 
-  const calculateAQI = (pm25, pm10, ozonePPM, coPPM, nh3PPM, no2PPM) => {
-    // Unit conversions to match NAQI standards
-    const ozoneUG = ozonePPM * 1960; // to µg/m³
-    const coMG = coPPM * 1.145;      // to mg/m³
-    const nh3UG = nh3PPM * 696;      // to µg/m³
-    const no2UG = no2PPM * 1880;     // to µg/m³
+  const calculateAQI = (pm25, pm10, o3ppm, coPPM, nh3PPM, no2PPM) => {
+    // Conversions to standard AQI units
+    const o3UG = o3ppm * 1960;   // ppm to µg/m³
+    const coMG = coPPM * 1.145;   // ppm to mg/m³
+    const nh3UG = nh3PPM * 696;  // ppm to µg/m³
+    const no2UG = no2PPM * 1880; // ppm to µg/m³
 
     const breakpoints = {
       "PM2.5": [[0,30,0,50],[31,60,51,100],[61,90,101,200],[91,120,201,300],[121,250,301,400],[251,500,401,500]],
@@ -54,20 +54,14 @@ function App() {
     const subIndices = [
       getSubIndex(pm25, "PM2.5"),
       getSubIndex(pm10, "PM10"),
-      getSubIndex(ozoneUG, "Ozone"),
+      getSubIndex(o3UG, "Ozone"),
       getSubIndex(coMG, "CO"),
       getSubIndex(nh3UG, "NH3"),
       getSubIndex(no2UG, "NO2")
     ];
 
     const overall = Math.max(...subIndices);
-    
-    let category = "Severe";
-    if (overall <= 50) category = "Good";
-    else if (overall <= 100) category = "Satisfactory";
-    else if (overall <= 200) category = "Moderate";
-    else if (overall <= 300) category = "Poor";
-    else if (overall <= 400) category = "Very Poor";
+    const category = overall <= 50 ? "Good" : overall <= 100 ? "Satisfactory" : overall <= 200 ? "Moderate" : overall <= 300 ? "Poor" : overall <= 400 ? "Very Poor" : "Severe";
 
     return { aqi: overall, category: `Air Quality is ${category}` };
   }
@@ -82,37 +76,30 @@ function App() {
         if (data === -1 || !data.field1) throw new Error("No data");
 
         const vals = {
-          temp: parseFloat(data.field1),
-          hum: parseFloat(data.field2),
-          pm25: parseFloat(data.field3),
-          pm10: parseFloat(data.field4),
-          o3: parseFloat(data.field5),
-          co: parseFloat(data.field6),
-          nh3: parseFloat(data.field7),
-          no2: parseFloat(data.field8)
+          t: parseFloat(data.field1), h: parseFloat(data.field2),
+          p25: parseFloat(data.field3), p10: parseFloat(data.field4),
+          o3: parseFloat(data.field5), co: parseFloat(data.field6),
+          nh3: parseFloat(data.field7), no2: parseFloat(data.field8)
         };
 
         setSensorData({
-          temperature: isNaN(vals.temp) ? "-- °C" : `${vals.temp.toFixed(2)} °C`,
-          humidity: isNaN(vals.hum) ? "-- %" : `${vals.hum.toFixed(2)} %`,
-          pm25: isNaN(vals.pm25) ? "-- µg/m³" : `${vals.pm25.toFixed(2)} µg/m³`,
-          pm10: isNaN(vals.pm10) ? "-- µg/m³" : `${vals.pm10.toFixed(2)} µg/m³`,
+          temperature: isNaN(vals.t) ? "-- °C" : `${vals.t.toFixed(1)} °C`,
+          humidity: isNaN(vals.h) ? "-- %" : `${vals.h.toFixed(1)} %`,
+          pm25: isNaN(vals.p25) ? "-- &mu;g/m³" : `${vals.p25.toFixed(1)} &mu;g/m³`,
+          pm10: isNaN(vals.p10) ? "-- &mu;g/m³" : `${vals.p10.toFixed(1)} &mu;g/m³`,
           co: isNaN(vals.co) ? "-- ppm" : `${vals.co.toFixed(2)} ppm`,
           ozone: isNaN(vals.o3) ? "-- ppb" : `${(vals.o3 * 1000).toFixed(0)} ppb`,
           nh3: isNaN(vals.nh3) ? "-- ppm" : `${vals.nh3.toFixed(2)} ppm`,
           no2: isNaN(vals.no2) ? "-- ppm" : `${vals.no2.toFixed(2)} ppm`
         });
 
-        if (!isNaN(vals.pm25)) {
-          const { aqi, category } = calculateAQI(vals.pm25, vals.pm10, vals.o3, vals.co, vals.nh3, vals.no2);
+        if (!isNaN(vals.p25)) {
+          const { aqi, category } = calculateAQI(vals.p25, vals.p10, vals.o3, vals.co, vals.nh3, vals.no2);
           setAqi(aqi);
           setAqiCategory(category);
         }
-
-        setLastUpdated(`Last Updated: ${new Date().toLocaleTimeString()}`);
-      } catch (e) {
-        console.error(e);
-      }
+        setLastUpdated(`Last Updated: ${new Date().toLocaleTimeString('en-IN')}`);
+      } catch (error) { console.error(error); }
     };
 
     fetchThingSpeakData();
