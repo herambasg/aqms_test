@@ -7,14 +7,16 @@ import MainAqiCard from './components/MainAqiCard';
 import SensorGrid from './components/SensorGrid';
 
 function App() {
+  // State for slides and sensor data
+  const [currentSlide, setCurrentSlide] = useState(0); // 0 = Dashboard, 1 = Education
   const [lastUpdated, setLastUpdated] = useState('Awaiting data...');
   const [aqi, setAqi] = useState('--');
   const [aqiCategory, setAqiCategory] = useState('Awaiting Data...');
   const [sensorData, setSensorData] = useState({
     temperature: '-- °C',
     humidity: '-- %',
-    pm25: '-- &mu;g/m³',
-    pm10: '-- &mu;g/m³',
+    pm25: '-- µg/m³',
+    pm10: '-- µg/m³',
     co: '-- ppm',
     ozone: '-- ppb',
     nh3: '-- ppm',
@@ -24,12 +26,13 @@ function App() {
   const channelID = '2824554';
   const readAPIKey = 'RFES375XAD85P4TZ';
 
+  // Enhanced calculation including NH3 and NO2
   const calculateAQI = (pm25, pm10, o3ppm, coPPM, nh3PPM, no2PPM) => {
-    // Conversions to standard AQI units
-    const o3UG = o3ppm * 1960;   // ppm to µg/m³
-    const coMG = coPPM * 1.145;   // ppm to mg/m³
-    const nh3UG = nh3PPM * 696;  // ppm to µg/m³
-    const no2UG = no2PPM * 1880; // ppm to µg/m³
+    // Standard conversions to µg/m³ or mg/m³
+    const o3UG = o3ppm * 1960;   
+    const coMG = coPPM * 1.145;   
+    const nh3UG = nh3PPM * 696;  
+    const no2UG = no2PPM * 1880; 
 
     const breakpoints = {
       "PM2.5": [[0,30,0,50],[31,60,51,100],[61,90,101,200],[91,120,201,300],[121,250,301,400],[251,500,401,500]],
@@ -64,7 +67,7 @@ function App() {
     const category = overall <= 50 ? "Good" : overall <= 100 ? "Satisfactory" : overall <= 200 ? "Moderate" : overall <= 300 ? "Poor" : overall <= 400 ? "Very Poor" : "Severe";
 
     return { aqi: overall, category: `Air Quality is ${category}` };
-  }
+  };
 
   useEffect(() => {
     const fetchThingSpeakData = async () => {
@@ -85,8 +88,8 @@ function App() {
         setSensorData({
           temperature: isNaN(vals.t) ? "-- °C" : `${vals.t.toFixed(1)} °C`,
           humidity: isNaN(vals.h) ? "-- %" : `${vals.h.toFixed(1)} %`,
-          pm25: isNaN(vals.p25) ? "-- &mu;g/m³" : `${vals.p25.toFixed(1)} &mu;g/m³`,
-          pm10: isNaN(vals.p10) ? "-- &mu;g/m³" : `${vals.p10.toFixed(1)} &mu;g/m³`,
+          pm25: isNaN(vals.p25) ? "-- µg/m³" : `${vals.p25.toFixed(1)} µg/m³`,
+          pm10: isNaN(vals.p10) ? "-- µg/m³" : `${vals.p10.toFixed(1)} µg/m³`,
           co: isNaN(vals.co) ? "-- ppm" : `${vals.co.toFixed(2)} ppm`,
           ozone: isNaN(vals.o3) ? "-- ppb" : `${(vals.o3 * 1000).toFixed(0)} ppb`,
           nh3: isNaN(vals.nh3) ? "-- ppm" : `${vals.nh3.toFixed(2)} ppm`,
@@ -102,24 +105,74 @@ function App() {
       } catch (error) { console.error(error); }
     };
 
+    // Initial fetch and regular interval
     fetchThingSpeakData();
-    const intervalId = setInterval(fetchThingSpeakData, 15000);
-    return () => clearInterval(intervalId);
+    const dataInterval = setInterval(fetchThingSpeakData, 15000);
+
+    // Slide switching interval (every 25 seconds)
+    const slideInterval = setInterval(() => {
+      setCurrentSlide((prev) => (prev === 0 ? 1 : 0));
+    }, 25000);
+
+    return () => {
+      clearInterval(dataInterval);
+      clearInterval(slideInterval);
+    };
   }, []);
 
   return (
     <div className="dashboard-container">
       <Header />
-      <main>
-        <p id="last-updated">{lastUpdated}</p>
-        <div className="left-column">
-          <AqiWidget />
-          <MainAqiCard aqi={aqi} category={aqiCategory} />
+      <div className="slider-wrapper">
+        <div className={`slides-track slide-position-${currentSlide}`}>
+          
+          {/* SLIDE 1: Main Dashboard */}
+          <main className="slide">
+            <p id="last-updated">{lastUpdated}</p>
+            <div className="left-column">
+              <AqiWidget />
+              <MainAqiCard aqi={aqi} category={aqiCategory} />
+            </div>
+            <div className="right-column">
+              <SensorGrid data={sensorData} />
+            </div>
+          </main>
+
+          {/* SLIDE 2: AQI Education */}
+          <main className="slide info-slide">
+             <section className="edu-section">
+                <h2>Understanding Air Quality Index (AQI)</h2>
+                <div className="edu-grid">
+                  <div className="edu-card">
+                    <h3>What is AQI?</h3>
+                    <p>The Air Quality Index is a standardized system used to report daily air quality. It tells you how clean or polluted your air is and what associated health effects might be a concern for you.</p>
+                  </div>
+                  <div className="edu-card">
+                    <h3>Measured Parameters</h3>
+                    <ul>
+                      <li><strong>PM2.5 & PM10:</strong> Tiny particles that can enter lungs.</li>
+                      <li><strong>Ozone (O₃):</strong> Ground-level smog affecting breathing.</li>
+                      <li><strong>CO:</strong> Colorless gas from vehicle emissions.</li>
+                      <li><strong>NO₂ & NH₃:</strong> Gases from industrial and traffic sources.</li>
+                    </ul>
+                  </div>
+                  <div className="edu-card full-width">
+                    <h3>AQI Health Categories</h3>
+                    <div className="aqi-scale-bar">
+                       <div className="scale-item good">0-50 Good</div>
+                       <div className="scale-item satisfactory">51-100 Satisfactory</div>
+                       <div className="scale-item moderate">101-200 Moderate</div>
+                       <div className="scale-item poor">201-300 Poor</div>
+                       <div className="scale-item very-poor">301-400 Very Poor</div>
+                       <div className="scale-item severe">401+ Severe</div>
+                    </div>
+                  </div>
+                </div>
+             </section>
+          </main>
+
         </div>
-        <div className="right-column">
-          <SensorGrid data={sensorData} />
-        </div>
-      </main>
+      </div>
       <Footer />
     </div>
   );

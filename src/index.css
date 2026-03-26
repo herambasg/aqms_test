@@ -1,4 +1,4 @@
-/* --- General Styling for TV --- */
+/* --- General Styling for TV Display --- */
 * {
   margin: 0;
   padding: 0;
@@ -17,211 +17,226 @@ html, body {
   height: 100%;
 }
 
-/* --- MODIFIED: Using CSS Grid for the main page layout --- */
+/* --- Main Page Layout --- */
 .dashboard-container {
   display: grid;
   grid-template-rows: auto 1fr auto; /* Header, Main (fills space), Footer */
   height: 100%;
 }
 
-/* --- Header --- */
+/* --- Header & Footer (Static across slides) --- */
 header {
   background: linear-gradient(90deg, #02c768, #0369a1);
   color: white;
   text-align: center;
-  padding: 1.5rem; /* Reduced from 2.5rem to save vertical space */
+  padding: 1.2rem; /* Reduced to maximize content space */
   border-bottom: 5px solid #02c768;
   position: relative;
 }
 
 header h1 {
   margin-top: -0.5rem;
-  font-size: 2.5rem; /* Slightly smaller for TV dimensions */
+  font-size: 2.6rem; 
   font-weight: 800;
 }
 
 header p {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #e0f2fe;
-  margin-bottom: -0.2rem;
-  padding-top: 0.3rem;
 }
 
-/* --- Logo Styling --- */
 #logo {
   position: absolute;
   top: 50%;
-  right: 220px;
+  right: 50px; /* Moved closer to edge for more header space */
   transform: translateY(-50%);
-  height: 100px; /* Adjusted size to match header reduction */
+  height: 90px; 
   width: auto;
 }
 
-/* --- Main Content --- */
-main {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto 1fr; 
-  gap: 1rem; /* Reduced gap */
-  padding: 1rem; /* Reduced padding */
-  overflow: hidden; 
-}
-
-#last-updated {
-  grid-column: 1 / -1; 
-  text-align: center;
-  color: #64748b;
-  font-size: 1.1rem;
-  margin-bottom: -0.5rem;
-}
-
-/* --- Column Styling --- */
-.left-column {
-  display: grid; 
-  grid-template-columns: 1fr 1fr; 
-  gap: 1rem;
-  height: 100%;
-  overflow: hidden;
-}
-
-.right-column {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-}
-
-.left-column > section {
-  height: 100%; 
-}
-
-/* --- Card & Section Styling --- */
-section {
-  background-color: #ffffff;
-  padding: 1rem;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px -2px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-}
-
-section h2 {
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: #0369a1;
-  margin-bottom: 0.8rem;
-  text-align: center;
-}
-
-/* --- Main AQI Card Styling --- */
-.main-aqi-card {
-  background: #e0f7fa;
-  border-left: 6px solid #0284c7;
-  align-items: center;
-  justify-content: center;
-}
-
-.main-aqi-card #calculated-aqi {
-  font-size: 5rem; /* Scaled down to prevent overflow */
-  font-weight: 700;
-  color: #0f172a;
-  line-height: 1;
-}
-
-.main-aqi-card #aqi-category {
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: #0f766e;
-  text-align: center;
-}
-
-/* --- Comparison Widget --- */
-.aqi-comparision .aqi-widget {
-  flex-grow: 1;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 120px; 
-}
-
-/* --- Sensor Grid Container (Right Column) --- */
-.sensor-grid-container {
-  flex-grow: 1;
-  overflow: hidden; 
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); 
-  grid-template-rows: repeat(4, 1fr); /* Updated to 4 rows to fit 8 cards */  
-  gap: 0.8rem; 
-  height: 100%;
-}
-
-.card {
-  background: #f8fafc;
-  padding: 0.6rem; /* Reduced padding to fit 4 rows */
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  transition: transform 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-.card h3 {
-  color: #0ea5e9;
-  margin-bottom: 0.3rem;
-  font-size: 0.95rem; /* Balanced for TV display */
-  font-weight: 500;
-}
-
-.card p {
-  font-size: 1.5rem; /* Optimized size for 8-card layout */
-  font-weight: 700;
-  color: #0f172a;
-}
-
-/* --- Footer --- */
 footer {
   text-align: center;
-  padding: 0.5rem; /* Reduced padding */
+  padding: 0.5rem;
   background: #e2e8f0;
   color: #475569;
   font-size: 0.85rem;
   border-top: 1px solid #cbd5e1;
 }
 
-/* --- Media Queries --- */
-@media (max-width: 1200px), (max-height: 700px) {
-  html, body {
-      height: auto;
-      overflow: auto;
-  }
-  .dashboard-container {
-      display: block; 
-  }
-  main, .left-column {
-      grid-template-columns: 1fr;
-  }
-  #logo {
-      position: static;
-      transform: none;
-      height: 60px;
-      margin: 0 auto 1rem;
-  }
-  header { text-align: center; }
+/* --- SLIDER MECHANICS --- */
+.slider-wrapper {
+  flex-grow: 1;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
 }
 
-@media tv and (min-width: 1920px) {
-  main {
-    grid-template-columns: 1fr 1fr; 
-  }
+.slides-track {
+  display: flex;
+  width: 200%; /* Total width for two slides */
+  height: 100%;
+  transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1); /* Smooth glide */
 }
+
+.slide {
+  width: 50%; /* One full screen width */
+  height: 100%;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 1.2rem;
+  overflow: hidden;
+}
+
+/* Active Slide Positions */
+.slide-position-0 { transform: translateX(0%); }
+.slide-position-1 { transform: translateX(-50%); }
+
+/* --- SLIDE 1: DASHBOARD LAYOUT --- */
+#last-updated {
+  grid-column: 1 / -1; 
+  text-align: center;
+  color: #64748b;
+  font-size: 1rem;
+  margin-bottom: -0.5rem;
+}
+
+.left-column {
+  display: grid; 
+  /* UPDATED: 80/20 split for the Live Widget and Main AQI Card */
+  grid-template-columns: 1.6fr 0.4fr; 
+  gap: 1.2rem;
+  height: 100%;
+}
+
+.right-column {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* 4x2 Sensor Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(4, 1fr); /* Accommodates 8 sensors */  
+  gap: 0.8rem; 
+  height: 100%;
+}
+
+.card {
+  background: #ffffff;
+  padding: 0.6rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card h3 {
+  color: #0ea5e9;
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+
+.card p {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Main AQI Card Styling */
+.main-aqi-card {
+  background: #e0f7fa;
+  border-left: 6px solid #0284c7;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-aqi-card #calculated-aqi {
+  font-size: 4.5rem; /* Reduced to fit the 20% width */
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.main-aqi-card #aqi-category {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #0f766e;
+}
+
+/* --- SLIDE 2: EDUCATION LAYOUT --- */
+.info-slide {
+  display: flex;
+  flex-direction: column;
+  background-color: #f8fafc;
+  padding: 2rem 4rem;
+}
+
+.edu-section {
+  width: 100%;
+}
+
+.edu-section h2 {
+  font-size: 2.2rem;
+  color: #0369a1;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.edu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.edu-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.edu-card h3 {
+  color: #02c768;
+  font-size: 1.6rem;
+  margin-bottom: 0.8rem;
+}
+
+.edu-card p, .edu-card li {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: #475569;
+}
+
+.full-width { grid-column: 1 / -1; }
+
+/* Visual AQI Scale Bar */
+.aqi-scale-bar {
+  display: flex;
+  height: 50px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.scale-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: white;
+}
+
+/* Color Coding */
+.good { background: #00e400; color: black; }
+.satisfactory { background: #91ff00; color: black; }
+.moderate { background: #ffff00; color: black; }
+.poor { background: #ff7e00; }
+.very-poor { background: #ff0000; }
+.severe { background: #99004c; }
