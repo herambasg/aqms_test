@@ -9,14 +9,8 @@ import './index.css';
 
 function App() {
   const [sensorData, setSensorData] = useState({
-    temperature: '--',
-    humidity: '--',
-    pm25: '--',
-    pm10: '--',
-    co: '--',
-    ozone: '--',
-    nh3: '--',
-    no2: '--',
+    temperature: '--', humidity: '--', pm25: '--', pm10: '--',
+    co: '--', ozone: '--', nh3: '--', no2: '--',
   });
 
   const [aqi, setAqi] = useState('--');
@@ -28,7 +22,6 @@ function App() {
   const readAPIKey = "4M30784J6QCH8781";
 
   const calculateAQI = (pm25, pm10, o3, co, nh3, no2) => {
-    // Standard CPCB AQI calculation logic
     const getSubIndex = (val, breaks, index) => {
       for (let i = 0; i < breaks.length - 1; i++) {
         if (val >= breaks[i] && val <= breaks[i + 1]) {
@@ -62,23 +55,15 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `https://api.thingspeak.com/channels/${channelID}/feeds/last.json?api_key=${readAPIKey}`
-        );
+        const response = await fetch(`https://api.thingspeak.com/channels/${channelID}/feeds/last.json?api_key=${readAPIKey}`);
         const data = await response.json();
-
         if (data) {
           const vals = {
-            t: parseFloat(data.field1),
-            h: parseFloat(data.field2),
-            p25: parseFloat(data.field3),
-            p10: parseFloat(data.field4),
-            o3: parseFloat(data.field5),
-            co: parseFloat(data.field6),
-            nh3: parseFloat(data.field7),
-            no2: parseFloat(data.field8),
+            t: parseFloat(data.field1), h: parseFloat(data.field2),
+            p25: parseFloat(data.field3), p10: parseFloat(data.field4),
+            o3: parseFloat(data.field5), co: parseFloat(data.field6),
+            nh3: parseFloat(data.field7), no2: parseFloat(data.field8),
           };
-
           setSensorData({
             temperature: `${vals.t.toFixed(1)} °C`,
             humidity: `${vals.h.toFixed(1)} %`,
@@ -89,70 +74,38 @@ function App() {
             nh3: `${vals.nh3.toFixed(2)} ppm`,
             no2: `${vals.no2.toFixed(2)} ppm`,
           });
-
           const result = calculateAQI(vals.p25, vals.p10, vals.o3, vals.co, vals.nh3, vals.no2);
           setAqi(result.aqi);
           setAqiCategory(result.category);
-
           const now = new Date();
           setLastUpdated(`${now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })} | ${now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}`);
         }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      } catch (error) { console.error("Error fetching data:", error); }
     };
-
     fetchData();
     const dataInterval = setInterval(fetchData, 30000);
-    const slideInterval = setInterval(() => {
-      setCurrentSlide((prev) => (prev === 0 ? 1 : 0));
-    }, 15000);
-
-    return () => {
-      clearInterval(dataInterval);
-      clearInterval(slideInterval);
-    };
+    const slideInterval = setInterval(() => { setCurrentSlide((prev) => (prev === 0 ? 1 : 0)); }, 15000);
+    return () => { clearInterval(dataInterval); clearInterval(slideInterval); };
   }, []);
 
   return (
     <div className="dashboard-container">
       <Header />
-      
       <main className="slider-wrapper">
-        <div 
-          className="slides-track" 
-          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-        >
-          {/* Slide 1: Real-time Data */}
+        <div className="slides-track" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
           <div className="slide">
             <div id="last-updated">Last Updated: {lastUpdated}</div>
-            
             <div className="left-column">
-              <div className="aqi-comparision">
-                <AqiWidget currentAqi={aqi} />
-              </div>
-              <div className="main-aqi-card">
-                <MainAqiCard aqi={aqi} category={aqiCategory} />
-              </div>
+              <AqiWidget currentAqi={aqi} />
+              <MainAqiCard aqi={aqi} category={aqiCategory} />
             </div>
-
-            <div className="right-column">
-              <div className="sensor-grid-container">
-                <SensorGrid data={sensorData} />
-              </div>
-            </div>
+            <div className="right-column"><SensorGrid data={sensorData} /></div>
           </div>
-
-          {/* Slide 2: Information/Standards */}
-          <div className="slide">
-             <InfoSlide />
-          </div>
+          <div className="slide"><InfoSlide /></div>
         </div>
       </main>
-
       <Footer />
     </div>
   );
 }
-
 export default App;
