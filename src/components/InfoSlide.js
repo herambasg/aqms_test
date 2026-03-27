@@ -38,10 +38,19 @@ const InfoSlide = () => {
         <div className="info-card formula-card">
           <h3>How We Calculate AQI</h3>
           <div className="formula-box">
-             <p className="formula-text">
-               I<sub>p</sub> = [ (I<sub>hi</sub> - I<sub>lo</sub>) / (BP<sub>hi</sub> - BP<sub>lo</sub>) ] × (C<sub>p</sub> - BP<sub>lo</sub>) + I<sub>lo</sub>
-             </p>
+            <p className="formula-text">
+              I<sub>p</sub> = [ (I<sub>hi</sub> - I<sub>lo</sub>) / (BP<sub>hi</sub> - BP<sub>lo</sub>) ] × (C<sub>p</sub> - BP<sub>lo</sub>) + I<sub>lo</sub>
+            </p>
           </div>
+          
+          {/* Brief Legend */}
+          <div style={{ fontSize: '0.8rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px', color: '#475569', marginBottom: '10px' }}>
+            <span><strong>I<sub>p</sub>:</strong> Resulting AQI</span>
+            <span><strong>C<sub>p</sub>:</strong> Sensor Reading</span>
+            <span><strong>BP<sub>hi/lo</sub>:</strong> Table Breakpoints</span>
+            <span><strong>I<sub>hi/lo</sub>:</strong> AQI Scale Limits</span>
+          </div>
+
           <p className="formula-desc">We calculate sub-indices for all pollutants; the <strong>Final AQI</strong> is the maximum value among them.</p>
         </div>
 
