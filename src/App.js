@@ -8,6 +8,7 @@ import SensorGrid from './components/SensorGrid';
 import InfoSlide from './components/InfoSlide';
 
 function App() {
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [lastUpdated, setLastUpdated] = useState('Awaiting data...');
   const [aqi, setAqi] = useState('--');
   const [aqiCategory, setAqiCategory] = useState('Awaiting Data...');
@@ -119,24 +120,32 @@ function App() {
 
     fetchThingSpeakData();
     const dInt = setInterval(fetchThingSpeakData, 15000);
+    const sInt = setInterval(() => setCurrentSlide(p => (p === 0 ? 1 : 0)), 25000);
 
-    return () => { clearInterval(dInt);};
+    return () => { clearInterval(dInt); clearInterval(sInt); };
   }, []);
 
   return (
     <div className="dashboard-container">
       <Header />
-      <main className="slide">
-        <p id="last-updated">{lastUpdated}</p>
-        <div className="left-column">
-          <AqiWidget />
-          <MainAqiCard aqi={aqi} category={aqiCategory} />
-          <p className="source-note">Real-time air pollution level in Hyderabad taken from aqi.in</p>
+      <div className="slider-wrapper">
+        <div className={`slides-track slide-position-${currentSlide}`}>
+          <main className="slide">
+            <p id="last-updated">{lastUpdated}</p>
+            <div className="left-column">
+              <AqiWidget />
+              <MainAqiCard aqi={aqi} category={aqiCategory} />
+              <p className="source-note">Real-time air pollution level in Hyderabad taken from aqi.in</p>
+            </div>
+            <div className="right-column">
+              <SensorGrid data={sensorData} />
+            </div>
+          </main>
+          <main className="slide">
+            <InfoSlide />
+          </main>
         </div>
-        <div className="right-column">
-          <SensorGrid data={sensorData} />
-        </div>
-      </main>
+      </div>
       <Footer />
     </div>
   );
