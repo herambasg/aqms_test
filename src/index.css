@@ -125,13 +125,13 @@ footer {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(4, 1fr); /* 4 rows for 8 sensors */
-  gap: 0.7rem;
+  gap: 0.5rem;
   flex-grow: 1; /* This forces the grid to expand downwards */
 }
 
 .card {
   background: white;
-  padding: 0.4rem;
+  padding: 0.3rem;
   border-radius: 16px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   text-align: center;
