@@ -13,6 +13,19 @@ const InfoSlide = () => {
           <p>The <strong>Air Quality Index</strong> is a "health thermometer" for the air. It converts complex pollutant data into a simple scale from <strong>0 to 500</strong>. Higher values mean higher pollution and greater health risks.</p>
         </div>
 
+        {/* 5. Formula & Calculation */}
+        <div className="info-card formula-card">
+          <h3>
+            How We Calculate AQI
+          </h3>
+          <div className="formula-box">
+             <p className="formula-text">
+               I<sub>p</sub> = [ (I<sub>hi</sub> - I<sub>lo</sub>) / (BP<sub>hi</sub> - BP<sub>lo</sub>) ] × (C<sub>p</sub> - BP<sub>lo</sub>) + I<sub>lo</sub>
+             </p>
+          </div>
+          <p className="formula-desc">We calculate sub-indices for all pollutants; the <strong>Final AQI</strong> is the maximum value among them.</p>
+        </div>
+
         {/* 2. Sensor Node Image */}
         <div className="info-card sensor-node">
           <h3>
@@ -64,18 +77,7 @@ const InfoSlide = () => {
           </div>
         </div>
 
-        {/* 5. Formula & Calculation */}
-        <div className="info-card formula-card">
-          <h3>
-            How We Calculate AQI
-          </h3>
-          <div className="formula-box">
-             <p className="formula-text">
-               I<sub>p</sub> = [ (I<sub>hi</sub> - I<sub>lo</sub>) / (BP<sub>hi</sub> - BP<sub>lo</sub>) ] × (C<sub>p</sub> - BP<sub>lo</sub>) + I<sub>lo</sub>
-             </p>
-          </div>
-          <p className="formula-desc">We calculate sub-indices for all pollutants; the <strong>Final AQI</strong> is the maximum value among them.</p>
-        </div>
+        
 
       </div>
     </section>
