@@ -1,113 +1,154 @@
 import React, { useState, useEffect } from 'react';
+import './App.css'; 
 import Header from './components/Header';
 import Footer from './components/Footer';
+import AqiWidget from './components/AqiWidget';
 import MainAqiCard from './components/MainAqiCard';
 import SensorGrid from './components/SensorGrid';
-import AqiWidget from './components/AqiWidget';
 import InfoSlide from './components/InfoSlide';
-import './index.css';
 
 function App() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [lastUpdated, setLastUpdated] = useState('Awaiting data...');
+  const [aqi, setAqi] = useState('--');
+  const [aqiCategory, setAqiCategory] = useState('Awaiting Data...');
   const [sensorData, setSensorData] = useState({
-    temperature: '--', humidity: '--', pm25: '--', pm10: '--',
-    co: '--', ozone: '--', nh3: '--', no2: '--',
+    temperature: '-- °C', humidity: '-- %',
+    pm25: '-- µg/m³', pm10: '-- µg/m³',
+    co: '-- ppm', ozone: '-- ppb',
+    nh3: '-- ppm', no2: '-- ppm',
   });
 
-  const [aqi, setAqi] = useState('--');
-  const [aqiCategory, setAqiCategory] = useState('Fetching...');
-  const [lastUpdated, setLastUpdated] = useState('--');
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const channelID = '2824554';
+  const readAPIKey = 'RFES375XAD85P4TZ';
 
-  const channelID = "2513941";
-  const readAPIKey = "4M30784J6QCH8781";
+  // --- ACCURATE AQI CALCULATION LOGIC ---
+  const calculateAQI = (pm25, pm10, o3ppm, coPPM, nh3PPM, no2PPM) => {
+    // 1. Convert gas concentrations to required units (µg/m³ or mg/m³)
+    const o3UG = o3ppm * 1960.0;   // ppm to µg/m³
+    const coMG = coPPM * 1.145;    // ppm to mg/m³
+    const nh3UG = nh3PPM * 696.0;  // ppm to µg/m³
+    const no2UG = no2PPM * 1880.0; // ppm to µg/m³
 
-  const calculateAQI = (pm25, pm10, o3, co, nh3, no2) => {
-    const getSubIndex = (val, breaks, index) => {
-      for (let i = 0; i < breaks.length - 1; i++) {
-        if (val >= breaks[i] && val <= breaks[i + 1]) {
-          return ((index[i + 1] - index[i]) / (breaks[i + 1] - breaks[i])) * (val - breaks[i]) + index[i];
-        }
-      }
-      return 0;
+    // 2. Define Standard CPCB Breakpoints [Clow, Chigh, Ilow, Ihigh]
+    const breakpoints = {
+      "PM2.5": [[0,30,0,50],[31,60,51,100],[61,90,101,200],[91,120,201,300],[121,250,301,400],[251,500,401,500]],
+      "PM10": [[0,50,0,50],[51,100,51,100],[101,250,101,200],[251,350,201,300],[351,430,301,400],[431,600,401,500]],
+      "Ozone": [[0,50,0,50],[51,100,51,100],[101,168,101,200],[169,208,201,300],[209,748,301,400],[749,1000,401,500]],
+      "CO": [[0,1,0,50],[1.1,2,51,100],[2.1,10,101,200],[11,17,201,300],[18,34,301,400],[35,100,401,500]],
+      "NH3": [[0,200,0,50],[201,400,51,100],[401,800,101,200],[801,1200,201,300],[1201,1800,301,400],[1801,3000,401,500]],
+      "NO2": [[0,40,0,50],[41,80,51,100],[81,180,101,200],[181,280,201,300],[281,400,301,400],[401,1000,401,500]]
     };
 
-    const i = [0, 50, 100, 200, 300, 400, 500];
-    const si = [
-      getSubIndex(pm25, [0, 30, 60, 90, 120, 250, 380], i),
-      getSubIndex(pm10, [0, 50, 100, 250, 350, 430, 500], i),
-      getSubIndex(o3, [0, 50, 100, 168, 208, 748, 1000], i),
-      getSubIndex(co, [0, 1, 2, 10, 17, 34, 50], i),
-      getSubIndex(nh3, [0, 200, 400, 800, 1200, 1800, 2400], i),
-      getSubIndex(no2, [0, 40, 80, 180, 280, 400, 500], i),
+    // 3. Linear Interpolation Function
+    const getSubIndex = (value, pollutant) => {
+      if (isNaN(value) || value < 0) return 0;
+      const poll_breakpoints = breakpoints[pollutant];
+      
+      for (const [Clow, Chigh, Ilow, Ihigh] of poll_breakpoints) {
+        if (value >= Clow && value <= Chigh) {
+          // Formula: ((Ihi-Ilo)/(Chi-Clo)) * (Val-Clo) + Ilo
+          return Math.round(((Ihigh - Ilow) / (Chigh - Clow)) * (value - Clow) + Ilow);
+        }
+      }
+      return value > 0 ? 500 : 0; // Cap at 500 for extreme values
+    }
+
+    // 4. Calculate Sub-Indices for each available pollutant
+    const subIndices = [
+      getSubIndex(pm25, "PM2.5"),
+      getSubIndex(pm10, "PM10"),
+      getSubIndex(o3UG, "Ozone"),
+      getSubIndex(coMG, "CO"),
+      getSubIndex(nh3UG, "NH3"),
+      getSubIndex(no2UG, "NO2")
     ];
 
-    const finalAqi = Math.round(Math.max(...si));
-    let category = "Good";
-    if (finalAqi > 400) category = "Severe";
-    else if (finalAqi > 300) category = "Very Poor";
-    else if (finalAqi > 200) category = "Poor";
-    else if (finalAqi > 100) category = "Moderate";
-    else if (finalAqi > 50) category = "Satisfactory";
+    // 5. Final AQI is the MAXIMUM of sub-indices
+    const overall = Math.max(...subIndices);
+    
+    const getCategory = (val) => {
+      if (val <= 50) return "Good";
+      if (val <= 100) return "Satisfactory";
+      if (val <= 200) return "Moderate";
+      if (val <= 300) return "Poor";
+      if (val <= 400) return "Very Poor";
+      return "Severe";
+    };
 
-    return { aqi: finalAqi, category };
+    return { aqi: overall, category: `Air Quality is ${getCategory(overall)}` };
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchThingSpeakData = async () => {
       try {
-        const response = await fetch(
-          `https://api.thingspeak.com/channels/${channelID}/feeds/last.json?api_key=${readAPIKey}`
-        );
+        const response = await fetch(`https://api.thingspeak.com/channels/${channelID}/feeds/last.json?api_key=${readAPIKey}`);
         const data = await response.json();
-        if (data) {
-          const vals = {
-            t: parseFloat(data.field1), h: parseFloat(data.field2),
-            p25: parseFloat(data.field3), p10: parseFloat(data.field4),
-            o3: parseFloat(data.field5), co: parseFloat(data.field6),
-            nh3: parseFloat(data.field7), no2: parseFloat(data.field8),
-          };
-          setSensorData({
-            temperature: `${vals.t.toFixed(1)} °C`,
-            humidity: `${vals.h.toFixed(1)} %`,
-            pm25: `${vals.p25.toFixed(1)} µg/m³`,
-            pm10: `${vals.p10.toFixed(1)} µg/m³`,
-            co: `${vals.co.toFixed(2)} ppm`,
-            ozone: `${(vals.o3 * 1000).toFixed(0)} ppb`,
-            nh3: `${vals.nh3.toFixed(2)} ppm`,
-            no2: `${vals.no2.toFixed(2)} ppm`,
-          });
-          const result = calculateAQI(vals.p25, vals.p10, vals.o3, vals.co, vals.nh3, vals.no2);
-          setAqi(result.aqi);
-          setAqiCategory(result.category);
-          const now = new Date();
-          setLastUpdated(`${now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })} | ${now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}`);
-        }
-      } catch (error) { console.error("Error fetching data:", error); }
+        
+        if (!data || !data.field1) return;
+
+        const vals = {
+          t: parseFloat(data.field1),
+          h: parseFloat(data.field2),
+          p25: parseFloat(data.field3),
+          p10: parseFloat(data.field4),
+          o3: parseFloat(data.field5),
+          co: parseFloat(data.field6),
+          nh3: parseFloat(data.field7),
+          no2: parseFloat(data.field8)
+        };
+
+        setSensorData({
+          temperature: `${vals.t.toFixed(1)} °C`,
+          humidity: `${vals.h.toFixed(1)} %`,
+          pm25: `${vals.p25.toFixed(1)} µg/m³`,
+          pm10: `${vals.p10.toFixed(1)} µg/m³`,
+          co: `${vals.co.toFixed(2)} ppm`,
+          ozone: `${(vals.o3 * 1000).toFixed(0)} ppb`,
+          nh3: `${vals.nh3.toFixed(2)} ppm`,
+          no2: `${vals.no2.toFixed(2)} ppm`
+        });
+
+        const result = calculateAQI(vals.p25, vals.p10, vals.o3, vals.co, vals.nh3, vals.no2);
+        setAqi(result.aqi);
+        setAqiCategory(result.category);
+        setLastUpdated(`Last Updated: ${new Date().toLocaleTimeString('en-IN')}`);
+      } catch (e) {
+        console.error("Fetch Error:", e);
+      }
     };
-    fetchData();
-    const dataInterval = setInterval(fetchData, 30000);
-    const slideInterval = setInterval(() => { setCurrentSlide((prev) => (prev === 0 ? 1 : 0)); }, 15000);
-    return () => { clearInterval(dataInterval); clearInterval(slideInterval); };
+
+    fetchThingSpeakData();
+    const dInt = setInterval(fetchThingSpeakData, 15000);
+    const sInt = setInterval(() => setCurrentSlide(p => (p === 0 ? 1 : 0)), 25000);
+
+    return () => { clearInterval(dInt); clearInterval(sInt); };
   }, []);
 
   return (
     <div className="dashboard-container">
       <Header />
-      <main className="slider-wrapper">
-        <div className="slides-track" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
-          <div className="slide">
-            <div id="last-updated">Last Updated: {lastUpdated}</div>
+      <div className="slider-wrapper">
+        <div className={`slides-track slide-position-${currentSlide}`}>
+          <main className="slide">
+            <p id="last-updated">{lastUpdated}</p>
             <div className="left-column">
-              <AqiWidget currentAqi={aqi} />
+              <AqiWidget />
               <MainAqiCard aqi={aqi} category={aqiCategory} />
+              <p className="source-note">Real-time air pollution level in Hyderabad taken from aqi.in</p>
             </div>
-            <div className="right-column"><SensorGrid data={sensorData} /></div>
-          </div>
-          <div className="slide"><InfoSlide /></div>
+            <div className="right-column">
+              <SensorGrid data={sensorData} />
+            </div>
+          </main>
+          <main className="slide">
+            <InfoSlide />
+          </main>
         </div>
-      </main>
+      </div>
       <Footer />
     </div>
   );
 }
+
 export default App;

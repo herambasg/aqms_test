@@ -3,7 +3,7 @@ import React from 'react';
 function SensorGrid({ data }) {
   return (
     <section className="sensor-grid-container">
-      <h2 className="sensor-header" style={{textAlign: 'center', color: '#0369a1'}}>
+      <h2 style={{fontSize: '1.2rem', marginBottom: '0.5rem', textAlign: 'center', color: '#0369a1'}}>
         HITAM Air Quality Parameter Readings
       </h2>
       <div className="grid">

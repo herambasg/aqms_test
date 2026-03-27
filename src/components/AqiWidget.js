@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function AqiWidget() {
+  useEffect(() => {
+    const widgetSource = document.getElementById('hyd-aqi-widget-source');
+    const widgetContainer = document.getElementById('aqi-widget-container');
+
+    if (widgetSource && widgetContainer && widgetContainer.childElementCount === 0) {
+      while (widgetSource.firstChild) {
+        widgetContainer.appendChild(widgetSource.firstChild);
+      }
+    }
+  }, []);
+
   return (
     <section className="aqi-comparision">
       <h2>Hyderabad Air Quality Index (Live)</h2>
-      <div id="aqi-widget-container" className="aqi-widget">
-        {/* Placeholder for external widget injection if needed */}
-      </div>
-      <p style={{fontSize: '0.8rem', color: '#64748b', marginTop: '10px', fontStyle: 'italic'}}>
-        Real-time air pollution level in Hyderabad taken from aqi.in
-      </p>
+      <div id="aqi-widget-container" className="aqi-widget"></div>
     </section>
   );
 }
