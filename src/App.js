@@ -141,8 +141,8 @@ function App() {
             <p id="last-updated">{lastUpdated}</p>
             <div className="left-column">
               <AqiWidget />
+                <p className="source-note">Real-time air pollution level in Hyderabad taken from aqi.in</p>
               <MainAqiCard aqi={aqi} category={aqiCategory} />
-              <p className="source-note">Real-time air pollution level in Hyderabad taken from aqi.in</p>
             </div>
             <div className="right-column">
               <SensorGrid data={sensorData} />
