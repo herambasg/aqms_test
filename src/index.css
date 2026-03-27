@@ -125,13 +125,13 @@ footer {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(4, 1fr); /* 4 rows for 8 sensors */
-  gap: 0.5rem;
-  flex-direction: column;
+  gap: 0.8rem;
+  flex-grow: 1;
 }
 
 .card {
   background: white;
-  padding: 1px;
+  padding: 0.5px;
   border-radius: 16px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -142,7 +142,7 @@ footer {
 }
 
 .card h3 { font-size: 1.5rem; color: #0ea5e9; margin-bottom: 0.3rem; }
-.card p { font-size: 1.2rem; font-weight: 800; color: #0f172a; }
+.card p { font-size: 1.8rem; font-weight: 800; color: #0f172a; }
 
 .aqi-widget {
   background: #f1f5f9;
