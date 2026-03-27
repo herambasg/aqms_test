@@ -16,6 +16,7 @@ function AqiWidget() {
     <section className="aqi-comparision">
       <h2>Hyderabad Air Quality Index (Live)</h2>
       <div id="aqi-widget-container" className="aqi-widget"></div>
+      <p className="source-note">Real-time air pollution level in Hyderabad taken from aqi.in</p>
     </section>
   );
 }
