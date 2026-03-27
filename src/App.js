@@ -113,10 +113,17 @@ function App() {
         setAqi(result.aqi);
         setAqiCategory(result.category);
         setLastUpdated(`Last Updated: ${new Date().toLocaleTimeString('en-IN')}`);
+
+        const now = new Date();
+        const options = { day: '2-digit', month: 'short', year: 'numeric' };
+        const dateStr = now.toLocaleDateString('en-IN', options);
+        const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      
+        setLastUpdated(`${dateStr} | Last Updated: ${timeStr}`);
       } catch (e) {
         console.error("Fetch Error:", e);
-      }
-    };
+    }
+  };
 
     fetchThingSpeakData();
     const dInt = setInterval(fetchThingSpeakData, 15000);
