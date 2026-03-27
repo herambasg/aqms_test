@@ -87,7 +87,8 @@ footer {
   text-align: center;
   color: #64748b;
   font-size: 1.1rem;
-  margin-bottom: -0.5rem;
+  padding: 5px 0;
+  margin: 0;
 }
 
 .left-column {
@@ -114,11 +115,41 @@ footer {
   height: 100%;
 }
 
+.aqi-comparision {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Vertically centered */
+  align-items: center;
+  height: 100%;
+  background: white;
+  border-radius: 20px; /* Rounded corners */
+  padding: 1rem;
+}
+
+.centered-title {
+  text-align: center; /* Center justified */
+  width: 100%;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  color: #0369a1;
+}
+
+.aqi-widget-inner {
+  width: 100%;
+  overflow: hidden; /* Prevents overflow */
+  border-radius: 12px;
+}
+
 /* SENSOR GRID FIX: Forces cards to fill vertical space */
 .sensor-grid-container {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+.sensor-grid-container h2 {
+  font-size: 1.6rem; /* Increased font size */
+  margin-bottom: 0.8rem;
 }
 
 .grid {
@@ -131,8 +162,8 @@ footer {
 
 .card {
   background: white;
-  padding: 1rem;
-  border-radius: 16px;
+  padding: 0.8rem;
+  border-radius: 20px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   text-align: center;
   display: flex;
@@ -142,16 +173,18 @@ footer {
 }
 
 .card h3 { font-size: 1.1rem; color: #0ea5e9; margin-bottom: 0.3rem; }
-.card p { font-size: 1.8rem; font-weight: 800; color: #0f172a; }
+.card p { font-size: 2rem; font-weight: 800; color: #0f172a; }
 
 /* MAIN AQI CARD */
 .main-aqi-card {
   background: #e0f7fa;
   border-left: 8px solid #0284c7;
+  border-radius: 20px; /* Rounded corners */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 
 .main-aqi-card #calculated-aqi {
@@ -185,12 +218,13 @@ footer {
 
 .info-card {
   background: white;
-  border-radius: 16px;
+  border-radius: 24px;
   padding: 18px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
   border: 1px solid #e2e8f0;
+  overflow: hidden;
 }
 
 .info-card h3 {
@@ -199,6 +233,10 @@ footer {
   margin-bottom: 12px;
   border-bottom: 2px solid #f1f5f9;
   padding-bottom: 8px;
+}
+
+.formula-card, .parameters, .sensor-node {
+  border-radius: 24px !important;
 }
 
 .aqi-definition p { font-size: 1.15rem; line-height: 1.5; color: #475569; }
@@ -241,7 +279,7 @@ footer {
 .formula-box {
   background: #f1f5f9;
   padding: 20px;
-  border-radius: 12px;
+  border-radius: 15px;
   text-align: center;
   margin-bottom: 12px;
   border-left: 5px solid #0369a1;

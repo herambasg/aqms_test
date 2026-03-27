@@ -14,8 +14,8 @@ function AqiWidget() {
 
   return (
     <section className="aqi-comparision">
-      <h2>Hyderabad Air Quality Index (Live)</h2>
-      <div id="aqi-widget-container" className="aqi-widget"></div>
+      <h2 className="centered-title">Hyderabad Air Quality Index (Live)</h2>
+      <div id="aqi-widget-container" className="aqi-widget-inner"></div>
     </section>
   );
 }
