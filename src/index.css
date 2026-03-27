@@ -92,10 +92,20 @@ footer {
 
 .left-column {
   display: grid;
-  /* 75/25 split for Hyderabad Widget and Main AQI Card */
-  grid-template-columns: 1.5fr 0.5fr; 
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr auto;
   gap: 1.5rem;
   height: 100%;
+}
+
+.source-note {
+  grid-column: 1 / -1; /* Spans across both equal columns */
+  text-align: left;    /* Aligns with the start of the widgets */
+  font-size: 1rem;     /* Clearly legible on TV */
+  color: #64748b;
+  margin-top: -1rem;   /* Pulls it slightly closer to the cards above */
+  font-style: italic;
+  padding-left: 0.5rem;
 }
 
 .right-column {
@@ -134,7 +144,7 @@ footer {
 .card h3 { font-size: 1.1rem; color: #0ea5e9; margin-bottom: 0.3rem; }
 .card p { font-size: 1.8rem; font-weight: 800; color: #0f172a; }
 
-/* MAIN AQI CARD FIX */
+/* MAIN AQI CARD */
 .main-aqi-card {
   background: #e0f7fa;
   border-left: 8px solid #0284c7;
@@ -145,67 +155,102 @@ footer {
 }
 
 .main-aqi-card #calculated-aqi {
-  font-size: 5rem;
+  font-size: 6rem;
   font-weight: 800;
   line-height: 1;
 }
 
 .main-aqi-card #aqi-category {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #0f766e;
   text-align: center;
   margin-top: 0.5rem;
 }
 
-/* --- SLIDE 2: EDUCATION --- */
-.info-slide {
-  display: block;
-  background: #f8fafc;
-  padding: 3rem 5rem;
+/* --- SLIDE 2: INFO SLIDE --- */
+.info-slide-container {
+  height: 100%;
+  width: 100%;
+  grid-column: 1 / -1; /* Fill entire slide width */
 }
 
-.edu-section h2 { font-size: 2.5rem; color: #0369a1; margin-bottom: 2rem; text-align: center; }
+.info-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  grid-template-rows: 1fr 1.2fr;
+  gap: 15px;
+  height: 100%;
+}
 
-.edu-grid {
+.info-card {
+  background: white;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e2e8f0;
+}
+
+.info-card h3 {
+  color: #0369a1;
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 8px;
+}
+
+.aqi-definition p { font-size: 1.15rem; line-height: 1.5; color: #475569; }
+
+.sensor-node { grid-row: span 2; justify-content: space-between; }
+.sensor-placeholder img {
+  width: 100%;
+  height: auto;
+  max-height: 250px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+.sensor-node p { font-size: 1rem; font-style: italic; color: #64748b; margin-top: 10px; }
+
+.aqi-table-card { grid-column: span 1; }
+.aqi-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.aqi-table th { text-align: left; padding: 6px; color: #64748b; font-size: 0.8rem; text-transform: uppercase; }
+.aqi-table td { padding: 6px; font-weight: 700; border-bottom: 1px solid rgba(0,0,0,0.05); }
+
+.row-good { background-color: #00e400; color: #000; }
+.row-sat { background-color: #91ff00; color: #000; }
+.row-mod { background-color: #ffff00; color: #000; }
+.row-poor { background-color: #ff7e00; color: #fff; }
+.row-vpoor { background-color: #ff0000; color: #fff; }
+.row-severe { background-color: #99004c; color: #fff; }
+
+.param-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2.5rem;
+  gap: 12px;
 }
+.param-item { font-size: 0.95rem; line-height: 1.3; color: #334155; }
+.param-item strong { color: #02c768; display: block; margin-bottom: 2px; }
 
-.edu-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+.formula-box {
+  background: #f1f5f9;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 12px;
+  border-left: 5px solid #0369a1;
 }
-
-.edu-card h3 { color: #02c768; margin-bottom: 1rem; font-size: 1.8rem; }
-.edu-card p, .edu-card li { font-size: 1.3rem; line-height: 1.6; color: #475569; }
-
-.full-width { grid-column: 1 / -1; }
-
-.aqi-scale-bar {
-  display: flex;
-  height: 60px;
-  border-radius: 15px;
-  overflow: hidden;
-  margin-top: 1.5rem;
-}
-
-.scale-item {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
+.formula-text {
+  font-family: 'Cambria', 'serif';
+  font-style: italic;
+  font-size: 1.3rem;
   font-weight: bold;
-  color: white;
+  color: #0f172a;
 }
-
-.good { background: #00e400; color: black; }
-.satisfactory { background: #91ff00; color: black; }
-.moderate { background: #ffff00; color: black; }
-.poor { background: #ff7e00; }
-.very-poor { background: #ff0000; }
-.severe { background: #99004c; }
+.formula-desc { font-size: 0.9rem; color: #64748b; line-height: 1.4; }

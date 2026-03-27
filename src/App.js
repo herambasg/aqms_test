@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import AqiWidget from './components/AqiWidget';
 import MainAqiCard from './components/MainAqiCard';
 import SensorGrid from './components/SensorGrid';
+import InfoSlide from './components/InfoSlide';
 
 function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -134,40 +135,14 @@ function App() {
             <div className="left-column">
               <AqiWidget />
               <MainAqiCard aqi={aqi} category={aqiCategory} />
+              <p className="source-note">Real-time air pollution level in Hyderabad taken from aqi.in</p>
             </div>
             <div className="right-column">
               <SensorGrid data={sensorData} />
             </div>
           </main>
-          <main className="slide info-slide">
-             <section className="edu-section">
-                <h2>Understanding Air Quality Index (AQI)</h2>
-                <div className="edu-grid">
-                  <div className="edu-card">
-                    <h3>What is AQI?</h3>
-                    <p>Standardized system to report daily air quality and its associated health effects.</p>
-                  </div>
-                  <div className="edu-card">
-                    <h3>Pollutants</h3>
-                    <ul>
-                      <li><strong>PM:</strong> Dust particles</li>
-                      <li><strong>O₃ & CO:</strong> Smog & Emissions</li>
-                      <li><strong>NO₂ & NH₃:</strong> Chemical Gases</li>
-                    </ul>
-                  </div>
-                  <div className="edu-card full-width">
-                    <h3>Health Scale</h3>
-                    <div className="aqi-scale-bar">
-                       <div className="scale-item good">0-50</div>
-                       <div className="scale-item satisfactory">51-100</div>
-                       <div className="scale-item moderate">101-200</div>
-                       <div className="scale-item poor">201-300</div>
-                       <div className="scale-item very-poor">301-400</div>
-                       <div className="scale-item severe">401+</div>
-                    </div>
-                  </div>
-                </div>
-             </section>
+          <main className="slide">
+            <InfoSlide />
           </main>
         </div>
       </div>
