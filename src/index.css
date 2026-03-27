@@ -103,7 +103,7 @@ footer {
   text-align: left;    /* Aligns with the start of the widgets */
   font-size: 1rem;     /* Clearly legible on TV */
   color: #64748b;
-  margin-top: 2rem;   /* Pulls it slightly closer to the cards above */
+  margin-top: 1.5rem;   /* Pulls it slightly closer to the cards above */
   font-style: italic;
   padding-left: 0.5rem;
 }
@@ -131,7 +131,7 @@ footer {
 
 .card {
   background: white;
-  padding: 0.7rem;
+  padding: 0.6rem;
   border-radius: 16px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -147,7 +147,7 @@ footer {
 .aqi-widget {
   background: #f1f5f9;
   border-radius: 16px;
-  padding: 18px;
+  padding: 15px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;

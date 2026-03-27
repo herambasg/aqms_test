@@ -14,7 +14,7 @@ function AqiWidget() {
 
   return (
     <section className="aqi-widget">
-      <h2 style={{fontSize: '1.5rem', paddingBottom: '3rem', textAlign: 'center', color: '#000000'}}>
+      <h2 style={{fontSize: '1.5rem', paddingBottom: '2.5rem', textAlign: 'center', color: '#000000'}}>
         Hyderabad Air Quality Index (Live)
       </h2>
       <div id="aqi-widget-container" className="aqi-widget"></div>
