@@ -55,7 +55,9 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://api.thingspeak.com/channels/${channelID}/feeds/last.json?api_key=${readAPIKey}`);
+        const response = await fetch(
+          `https://api.thingspeak.com/channels/${channelID}/feeds/last.json?api_key=${readAPIKey}`
+        );
         const data = await response.json();
         if (data) {
           const vals = {
