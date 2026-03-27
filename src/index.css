@@ -131,7 +131,7 @@ footer {
 
 .card {
   background: white;
-  padding: 0.5rem;
+  padding: 0.7rem;
   border-radius: 16px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -144,10 +144,20 @@ footer {
 .card h3 { font-size: 1.5rem; color: #0ea5e9; margin-bottom: 0.3rem; }
 .card p { font-size: 1.8rem; font-weight: 800; color: #0f172a; }
 
-/* MAIN AQI CARD */
+.aqi-widget {
+  background: #f1f5f9;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e2e8f0;
+}
+
 .main-aqi-card {
   background: #e0f7fa;
   border-left: 8px solid #0284c7;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
   justify-content: center;
