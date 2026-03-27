@@ -103,7 +103,7 @@ footer {
   text-align: left;    /* Aligns with the start of the widgets */
   font-size: 1rem;     /* Clearly legible on TV */
   color: #64748b;
-  margin-top: 1rem;   /* Pulls it slightly closer to the cards above */
+  margin-top: 2rem;   /* Pulls it slightly closer to the cards above */
   font-style: italic;
   padding-left: 0.5rem;
 }
@@ -131,7 +131,7 @@ footer {
 
 .card {
   background: white;
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 16px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -163,9 +163,9 @@ footer {
 .main-aqi-card #aqi-category {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #0f766e;
+  color: #056c64;
   text-align: center;
-  margin-top: 0.5rem;
+  margin-top: 2rem;
 }
 
 /* --- SLIDE 2: INFO SLIDE --- */
