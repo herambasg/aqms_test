@@ -1,4 +1,7 @@
 import React from 'react';
+import logo from '../assets/Hitam logo.png';
+import Node_1 from '../assets/Node_1.jpeg';
+import Node_2 from '../assets/Node_2.jpeg';
 
 const InfoSlide = () => {
   return (
@@ -15,11 +18,23 @@ const InfoSlide = () => {
         <div className="info-card sensor-node">
           <h3>Our Sensor Node</h3>
           <div className="sensor-content">
-            <div className="sensor-placeholder">
-               {/* Replace with your actual image path */}
-               <img src="/assets/sensor-node.png" alt="HITAM Sensor Node" />
+            <div className="sensor-dual-images">
+              {/* 9:16 Aspect Ratio Images */}
+              <div className="sensor-image-wrapper">
+                <img src={Node_1} alt="IoT Node Exterior" />
+              </div>
+              <div className="sensor-image-wrapper">
+                <img src={Node_2} alt="Node Placement" />
+              </div>
             </div>
-            <p>The <strong>HITAM Sentinel</strong>: Custom IoT hardware using laser-scattering and electrochemical sensors for real-time monitoring.</p>
+            <div className="sensor-description">
+              <p>
+                Our air quality monitoring station is located in the <strong>1st Floor Lobby</strong>, 
+                positioned to face outdoors for accurate readings. The system is custom-built 
+                to run 24/7 with a constant power supply and a stable internet connection 
+                for real-time data updates.
+              </p>
+            </div>
           </div>
         </div>
 

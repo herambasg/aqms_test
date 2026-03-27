@@ -216,16 +216,45 @@ footer {
 
 .aqi-definition p { font-size: 1.15rem; line-height: 1.5; color: #475569; }
 
-.sensor-node { grid-row: span 2; justify-content: space-between; }
-.sensor-placeholder img {
-  width: 100%;
-  height: auto;
-  max-height: 250px;
-  object-fit: contain;
-  border-radius: 12px;
-  background: #f8fafc;
+/* Container for side-by-side 9:16 images */
+.sensor-dual-images {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 12px;
 }
-.sensor-node p { font-size: 1rem; font-style: italic; color: #64748b; margin-top: 10px; }
+
+.sensor-image-wrapper {
+  flex: 1;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  border-radius: 15px;
+  background: #f1f5f9;
+}
+
+.sensor-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Simplified Formula Legend */
+.formula-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #475569;
+  margin-bottom: 10px;
+  padding: 5px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.sensor-description p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #334155;
+}
 
 .aqi-table-card { grid-column: span 1; }
 .aqi-table {
