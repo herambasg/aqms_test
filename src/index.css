@@ -18,10 +18,14 @@ html, body {
 }
 
 .dashboard-container {
-  display: grid;
-  grid-template-rows: auto 1fr auto; /* Header, Main (fills space), Footer */
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
 }
+
+header { height: 120px; flex-shrink: 0; }
+footer { height: 40px; flex-shrink: 0; }
 
 /* --- Header & Footer --- */
 header {
@@ -54,10 +58,9 @@ footer {
 
 /* --- SLIDER MECHANICS --- */
 .slider-wrapper {
-  flex-grow: 1;
+  height: calc(100vh - 160px); 
   width: 100%;
   overflow: hidden;
-  position: relative;
 }
 
 .slides-track {
@@ -87,8 +90,15 @@ footer {
   text-align: center;
   color: #64748b;
   font-size: 1.1rem;
-  padding: 5px 0;
+  padding: 1px 0; 
   margin: 0;
+}
+
+.card, .info-card, .main-aqi-card, .aqi-comparision {
+  border-radius: 25px !important; 
+  overflow: hidden;
+  background: white;
+  border: 1px solid #e2e8f0;
 }
 
 .left-column {
@@ -118,20 +128,17 @@ footer {
 .aqi-comparision {
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Vertically centered */
+  justify-content: center; 
   align-items: center;
-  height: 100%;
-  background: white;
-  border-radius: 20px; /* Rounded corners */
-  padding: 1rem;
+  padding: 1.5rem;
 }
 
 .centered-title {
-  text-align: center; /* Center justified */
+  text-align: center;
   width: 100%;
-  margin-bottom: 1rem;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   color: #0369a1;
+  margin-bottom: 0.5rem;
 }
 
 .aqi-widget-inner {
@@ -148,16 +155,17 @@ footer {
 }
 
 .sensor-grid-container h2 {
-  font-size: 1.6rem; /* Increased font size */
-  margin-bottom: 0.8rem;
+  font-size: 1.7rem; /* Increased as requested */
+  color: #0369a1;
+  margin-bottom: 10px;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(4, 1fr); /* 4 rows for 8 sensors */
-  gap: 1rem;
-  flex-grow: 1; /* This forces the grid to expand downwards */
+  grid-template-rows: repeat(4, 1fr);
+  gap: 12px;
+  flex-grow: 1;
 }
 
 .card {
@@ -173,7 +181,7 @@ footer {
 }
 
 .card h3 { font-size: 1.1rem; color: #0ea5e9; margin-bottom: 0.3rem; }
-.card p { font-size: 2rem; font-weight: 800; color: #0f172a; }
+.card p { font-size: 2.2rem; font-weight: 800; }
 
 /* MAIN AQI CARD */
 .main-aqi-card {
@@ -211,9 +219,10 @@ footer {
 .info-grid {
   display: grid;
   grid-template-columns: 1.2fr 1fr 1fr;
-  grid-template-rows: 1fr 1.2fr;
-  gap: 15px;
-  height: 100%;
+  grid-template-rows: 1fr 1fr; /* Equal height rows to ensure formula is visible */
+  gap: 20px;
+  height: 95%; /* Small buffer to prevent footer overlap */
+  width: 100%;
 }
 
 .info-card {

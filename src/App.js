@@ -81,9 +81,9 @@ function App() {
 
   useEffect(() => {
     const fetchThingSpeakData = async () => {
-      try {
-        const response = await fetch(`https://api.thingspeak.com/channels/${channelID}/feeds/last.json?api_key=${readAPIKey}`);
-        const data = await response.json();
+    try {
+      const response = await fetch(`https://api.thingspeak.com/channels/${channelID}/feeds/last.json?api_key=${readAPIKey}`);
+      const data = await response.json();
         
         if (!data || !data.field1) return;
 
@@ -115,11 +115,10 @@ function App() {
         setLastUpdated(`Last Updated: ${new Date().toLocaleTimeString('en-IN')}`);
 
         const now = new Date();
-        const options = { day: '2-digit', month: 'short', year: 'numeric' };
-        const dateStr = now.toLocaleDateString('en-IN', options);
+        const dateStr = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
         const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      
-        setLastUpdated(`${dateStr} | Last Updated: ${timeStr}`);
+        
+        setLastUpdated(`${dateStr} | Last Updated: ${timeStr}`); // Added date to the left
       } catch (e) {
         console.error("Fetch Error:", e);
       }
@@ -141,8 +140,8 @@ function App() {
             <p id="last-updated">{lastUpdated}</p>
             <div className="left-column">
               <AqiWidget />
+                <p className="source-note">Real-time air pollution level in Hyderabad taken from aqi.in</p>
               <MainAqiCard aqi={aqi} category={aqiCategory} />
-              <p className="source-note">Real-time air pollution level in Hyderabad taken from aqi.in</p>
             </div>
             <div className="right-column">
               <SensorGrid data={sensorData} />

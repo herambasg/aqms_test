@@ -4,60 +4,48 @@ const InfoSlide = () => {
   return (
     <section className="info-slide-container">
       <div className="info-grid">
-        
-        {/* 1. What is AQI */}
         <div className="info-card aqi-definition">
           <h3>What is AQI?</h3>
-          <p>The <strong>Air Quality Index</strong> is a "health thermometer" for the air. It converts complex pollutant data into a simple scale from <strong>0 to 500</strong>. Higher values mean higher pollution and greater health risks.</p>
+          <p>The <strong>Air Quality Index</strong> is a "health thermometer" for the air. It converts complex pollutant data into a simple scale from <strong>0 to 500</strong>.</p>
         </div>
 
-        {/* 2. Sensor Node Image */}
         <div className="info-card sensor-node">
           <h3>Our Sensor Node</h3>
           <div className="sensor-content">
             <div className="sensor-placeholder">
-               {/* Replace with your actual image path */}
                <img src="/assets/sensor-node.png" alt="HITAM Sensor Node" />
             </div>
-            <p>The <strong>HITAM Sentinel</strong>: Custom IoT hardware using laser-scattering and electrochemical sensors for real-time monitoring.</p>
+            <p>The <strong>HITAM Sentinel</strong>: Custom IoT hardware monitoring PM2.5, PM10, Gases, Temp, and Humidity.</p>
           </div>
         </div>
 
-        {/* 3. AQI Basics Table */}
         <div className="info-card aqi-table-card">
           <h3>AQI Basics Reference</h3>
           <table className="aqi-table">
             <thead>
-              <tr>
-                <th>Range</th>
-                <th>Category</th>
-                <th>Health Impact</th>
-              </tr>
+              <tr><th>Range</th><th>Category</th><th>Health Impact</th></tr>
             </thead>
             <tbody>
-              <tr className="row-good"><td>0 - 50</td><td>Good</td><td>Minimal impact</td></tr>
-              <tr className="row-sat"><td>51 - 100</td><td>Satisfactory</td><td>Minor breathing discomfort</td></tr>
-              <tr className="row-mod"><td>101 - 200</td><td>Moderate</td><td>Discomfort to children/elderly</td></tr>
-              <tr className="row-poor"><td>201 - 300</td><td>Poor</td><td>Health alert for everyone</td></tr>
-              <tr className="row-vpoor"><td>301 - 400</td><td>Very Poor</td><td>Respiratory illness risk</td></tr>
-              <tr className="row-severe"><td>401 - 500</td><td>Severe</td><td>Serious health impacts</td></tr>
+              <tr className="row-good"><td>0-50</td><td>Good</td><td>Minimal impact</td></tr>
+              <tr className="row-sat"><td>51-100</td><td>Satisfactory</td><td>Minor discomfort</td></tr>
+              <tr className="row-mod"><td>101-200</td><td>Moderate</td><td>Discomfort to sensitive</td></tr>
+              <tr className="row-poor"><td>201-300</td><td>Poor</td><td>Health alert</td></tr>
+              <tr className="row-vpoor"><td>301-400</td><td>Very Poor</td><td>Illness risk</td></tr>
+              <tr className="row-severe"><td>401-500</td><td>Severe</td><td>Serious impacts</td></tr>
             </tbody>
           </table>
         </div>
 
-        {/* 4. Parameters & Impact */}
-        // ... inside InfoSlide component ...
         <div className="info-card parameters">
-        <h3>Monitored Parameters & Units</h3>
-        <div className="param-grid">
+          <h3>Monitored Parameters & Units</h3>
+          <div className="param-grid">
             <div className="param-item"><strong>PM2.5 / PM10 (µg/m³):</strong> Fine/Coarse dust.</div>
             <div className="param-item"><strong>CO (ppm):</strong> Carbon Monoxide gas.</div>
             <div className="param-item"><strong>NO₂ (ppm):</strong> Nitrogen Dioxide.</div>
             <div className="param-item"><strong>O₃ (ppb):</strong> Ground-level Ozone.</div>
-        </div>
+          </div>
         </div>
 
-        {/* 5. Formula & Calculation */}
         <div className="info-card formula-card">
           <h3>How We Calculate AQI</h3>
           <div className="formula-box">
@@ -65,9 +53,8 @@ const InfoSlide = () => {
                I<sub>p</sub> = [ (I<sub>hi</sub> - I<sub>lo</sub>) / (BP<sub>hi</sub> - BP<sub>lo</sub>) ] × (C<sub>p</sub> - BP<sub>lo</sub>) + I<sub>lo</sub>
              </p>
           </div>
-          <p className="formula-desc">We calculate sub-indices for all pollutants; the <strong>Final AQI</strong> is the maximum value among them.</p>
+          <p className="formula-desc">Final AQI is the <strong>MAXIMUM</strong> value among all sub-indices.</p>
         </div>
-
       </div>
     </section>
   );
