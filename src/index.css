@@ -5,27 +5,22 @@
   box-sizing: border-box;
 }
 
-html, body {
-  height: 100vh; /* Full viewport height */
-  overflow: hidden; /* No scrolling for TV display */
-  font-family: 'Inter', 'Segoe UI', sans-serif;
+html, body, #root {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
   background-color: #f0f4f8;
-  color: #1e293b;
-}
-
-#root {
-  height: 100%;
 }
 
 .dashboard-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  overflow: hidden;
 }
 
 header { height: 120px; flex-shrink: 0; }
-footer { height: 40px; flex-shrink: 0; }
+footer { height: 30px; flex-shrink: 0; }
 
 /* --- Header & Footer --- */
 header {
@@ -58,7 +53,8 @@ footer {
 
 /* --- SLIDER MECHANICS --- */
 .slider-wrapper {
-  height: calc(100vh - 160px); 
+  /* Fits exactly between header and footer */
+  height: calc(100vh - 150px); 
   width: 100%;
   overflow: hidden;
 }
@@ -91,7 +87,6 @@ footer {
   color: #64748b;
   font-size: 1.1rem;
   padding: 1px 0; 
-  margin: 0;
 }
 
 .card, .info-card, .main-aqi-card, .aqi-comparision {
@@ -130,7 +125,14 @@ footer {
   flex-direction: column;
   justify-content: center; 
   align-items: center;
-  padding: 1.5rem;
+  padding: 1rem;
+}
+
+.aqi-comparision h2 {
+  text-align: center; /* Center justified */
+  font-size: 1.4rem;
+  color: #0369a1;
+  margin-bottom: 10px;
 }
 
 .centered-title {
@@ -221,9 +223,23 @@ footer {
   grid-template-columns: 1.2fr 1fr 1fr;
   grid-template-rows: 1fr 1fr; /* Equal height rows to ensure formula is visible */
   gap: 20px;
-  height: 95%; /* Small buffer to prevent footer overlap */
+  height: 100%; /* Small buffer to prevent footer overlap */
   width: 100%;
 }
+
+.formula-card {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.sensor-header {
+  font-size: 1.7rem !important; /* Increased font size */
+  color: #0369a1;
+  margin-bottom: 10px;
+}
+
+.card h3 { font-size: 1.2rem; }
+.card p { font-size: 2.2rem; font-weight: 800; }
 
 .info-card {
   background: white;

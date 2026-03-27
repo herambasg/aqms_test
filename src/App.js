@@ -116,9 +116,9 @@ function App() {
 
         const now = new Date();
         const dateStr = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-        const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        
-        setLastUpdated(`${dateStr} | Last Updated: ${timeStr}`); // Added date to the left
+        const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+
+        setLastUpdated(`${dateStr} | Last Updated: ${timeStr}`); // Today's date on the left
       } catch (e) {
         console.error("Fetch Error:", e);
       }
