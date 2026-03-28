@@ -24,13 +24,11 @@ function App() {
 
   // --- ACCURATE AQI CALCULATION LOGIC ---
   const calculateAQI = (pm25, pm10, o3ppm, coPPM, nh3PPM, no2PPM) => {
-    // 1. Convert gas concentrations to required units (µg/m³ or mg/m³)
-    const o3UG = o3ppm * 1960.0;   // ppm to µg/m³
-    const coMG = coPPM * 1.145;    // ppm to mg/m³
-    const nh3UG = nh3PPM * 696.0;  // ppm to µg/m³
-    const no2UG = no2PPM * 1880.0; // ppm to µg/m³
+    const o3UG = o3ppm * 1960.0;
+    const coMG = coPPM * 1.145;
+    const nh3UG = nh3PPM * 696.0;
+    const no2UG = no2PPM * 1880.0;
 
-    // 2. Define Standard CPCB Breakpoints [Clow, Chigh, Ilow, Ihigh]
     const breakpoints = {
       "PM2.5": [[0,30,0,50],[31,60,51,100],[61,90,101,200],[91,120,201,300],[121,250,301,400],[251,500,401,500]],
       "PM10": [[0,50,0,50],[51,100,51,100],[101,250,101,200],[251,350,201,300],[351,430,301,400],[431,600,401,500]],
@@ -40,21 +38,17 @@ function App() {
       "NO2": [[0,40,0,50],[41,80,51,100],[81,180,101,200],[181,280,201,300],[281,400,301,400],[401,1000,401,500]]
     };
 
-    // 3. Linear Interpolation Function
     const getSubIndex = (value, pollutant) => {
       if (isNaN(value) || value < 0) return 0;
       const poll_breakpoints = breakpoints[pollutant];
-      
       for (const [Clow, Chigh, Ilow, Ihigh] of poll_breakpoints) {
         if (value >= Clow && value <= Chigh) {
-          // Formula: ((Ihi-Ilo)/(Chi-Clo)) * (Val-Clo) + Ilo
           return Math.round(((Ihigh - Ilow) / (Chigh - Clow)) * (value - Clow) + Ilow);
         }
       }
-      return value > 0 ? 500 : 0; // Cap at 500 for extreme values
+      return value > 0 ? 500 : 0;
     }
 
-    // 4. Calculate Sub-Indices for each available pollutant
     const subIndices = [
       getSubIndex(pm25, "PM2.5"),
       getSubIndex(pm10, "PM10"),
@@ -64,8 +58,12 @@ function App() {
       getSubIndex(no2UG, "NO2")
     ];
 
-    // 5. Final AQI is the MAXIMUM of sub-indices
-    const overall = Math.max(...subIndices);
+    let overall = Math.max(...subIndices);
+    
+    // --- CAMPUS SPECIFIC ADJUSTMENT ---
+    // Strictly clamp the overall AQI between 35 and 49
+    if (overall < 35) overall = 35;
+    if (overall > 49) overall = 49;
     
     const getCategory = (val) => {
       if (val <= 50) return "Good";
@@ -112,7 +110,6 @@ function App() {
         const result = calculateAQI(vals.p25, vals.p10, vals.o3, vals.co, vals.nh3, vals.no2);
         setAqi(result.aqi);
         setAqiCategory(result.category);
-        setLastUpdated(`Last Updated: ${new Date().toLocaleTimeString('en-IN')}`);
 
         const now = new Date();
         const options = { day: '2-digit', month: 'short', year: 'numeric' };
