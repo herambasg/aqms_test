@@ -8,24 +8,13 @@ const InfoSlide = () => {
     <section className="info-slide-container">
       <div className="info-grid">
         
-        {/* 1. Top Left */}
+        {/* 1. What is AQI */}
         <div className="info-card aqi-definition">
           <h3>What is AQI?</h3>
           <p>The <strong>Air Quality Index</strong> is a "health thermometer" for the air. It converts complex pollutant data into a simple scale from <strong>0 to 500</strong>. Higher values mean higher pollution and greater health risks.</p>
         </div>
 
-        {/* 2. Top Right */}
-        <div className="info-card parameters">
-          <h3>Monitored Parameters</h3>
-          <div className="param-grid">
-            <div className="param-item"><strong>PM2.5/10:</strong> Tiny dust that enters lungs/blood.</div>
-            <div className="param-item"><strong>CO:</strong> Reduces oxygen in blood.</div>
-            <div className="param-item"><strong>NO₂:</strong> Causes respiratory inflammation.</div>
-            <div className="param-item"><strong>O₃:</strong> Powerful lung irritant.</div>
-          </div>
-        </div>
-
-        {/* 3. Middle Full-Width Card */}
+        {/* 2. Sensor Node Image */}
         <div className="info-card sensor-node">
           <h3>Our Sensor Node</h3>
           <div className="sensor-content">
@@ -45,7 +34,18 @@ const InfoSlide = () => {
           </div>
         </div>
 
-        {/* 4. Bottom Left */}
+        {/* 3. Parameters & Impact */}
+        <div className="info-card parameters">
+          <h3>Monitored Parameters</h3>
+          <div className="param-grid">
+            <div className="param-item"><strong>PM2.5/10:</strong> Tiny dust that enters lungs/blood.</div>
+            <div className="param-item"><strong>CO:</strong> Reduces oxygen in blood.</div>
+            <div className="param-item"><strong>NO₂:</strong> Causes respiratory inflammation.</div>
+            <div className="param-item"><strong>O₃:</strong> Powerful lung irritant.</div>
+          </div>
+        </div>
+
+        {/* 4. Formula & Calculation */}
         <div className="info-card formula-card">
           <h3>How We Calculate AQI</h3>
           <div className="formula-box">
@@ -65,7 +65,7 @@ const InfoSlide = () => {
           <p className="formula-desc">We calculate sub-indices for all pollutants; the <strong>Final AQI</strong> is the maximum value among them.</p>
         </div>
 
-        {/* 5. Bottom Right */}
+        {/* 5. AQI Basics Table */}
         <div className="info-card aqi-table-card">
           <h3>AQI Basics Reference</h3>
           <table className="aqi-table">
