@@ -189,8 +189,8 @@ footer {
 .info-grid {
   display: grid;
   grid-template-columns: 1.2fr 1fr 1fr;
-  grid-template-rows: 0.9fr 1.1fr;
-  gap: 15px;
+  grid-template-rows: 1fr 1.2fr;
+  gap: 12px;
   height: 100%;
   width: 100%;
   padding-bottom: 5px;
@@ -210,7 +210,6 @@ footer {
   color: #0369a1;
   font-size: 1.5rem;
   text-align: center;
-  vertical-align: middle;
   margin-bottom: 12px;
   border-bottom: 2px solid #f1f5f9;
   padding-bottom: 6px;
@@ -221,16 +220,17 @@ footer {
 /* Container for side-by-side 9:16 images */
 .sensor-dual-images {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   justify-content: center;
-  max-height: 180px; 
+  max-height: 160px;
+  max-width: 90px; 
   margin-bottom: 8px;
 }
 
 .sensor-image-wrapper {
   flex: 1;
   aspect-ratio: 9 / 16;
-  max-height: 180px;
+  max-height: 160px;
   overflow: hidden;
   border-radius: 12px;
   background: #f1f5f9;
