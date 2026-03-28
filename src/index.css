@@ -220,17 +220,17 @@ footer {
 /* Container for side-by-side 9:16 images */
 .sensor-dual-images {
   display: flex;
-  gap: 12px;
+  gap: 20rem;
   justify-content: center;
-  max-height: 16rem;
-  max-width: 9rem; 
+  max-height: 48rem;
+  max-width: 27rem; 
   margin-bottom: 8px;
 }
 
 .sensor-image-wrapper {
   flex: 1;
   aspect-ratio: 9 / 16;
-  max-height: 16rem;
+  max-height: 48rem;
   overflow: hidden;
   border-radius: 12px;
   background: #f1f5f9;
