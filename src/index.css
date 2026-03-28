@@ -217,7 +217,7 @@ footer {
 
 .sensor-dual-images {
   display: flex;
-  flex-direction: column; /* Stack images vertically to fit the narrow middle column */
+  flex-direction: row;
   gap: 8px;
   flex-grow: 1;
   justify-content: center;
