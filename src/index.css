@@ -290,10 +290,25 @@ footer {
   margin-bottom: 8px;
 }
 
-.formula-desc {
-  font-size: 0.8rem;
-  line-height: 1.2;
+.formula-box {
+  background: #f1f5f9;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 12px;
+  border-left: 5px solid #0369a1;
 }
+
+.formula-text {
+  font-family: 'Cambria', 'serif';
+  font-style: italic;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #0f172a;
+}
+
+.formula-desc { font-size: 0.9rem; color: #64748b; line-height: 1.4; }
+
 
 .aqi-table-card { grid-column: span 1; }
 .aqi-table {
@@ -318,20 +333,3 @@ footer {
 }
 .param-item { font-size: 0.95rem; line-height: 1.3; color: #334155; }
 .param-item strong { color: #02c768; display: block; margin-bottom: 2px; }
-
-.formula-box {
-  background: #f1f5f9;
-  padding: 20px;
-  border-radius: 12px;
-  text-align: center;
-  margin-bottom: 12px;
-  border-left: 5px solid #0369a1;
-}
-.formula-text {
-  font-family: 'Cambria', 'serif';
-  font-style: italic;
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: #0f172a;
-}
-.formula-desc { font-size: 0.9rem; color: #64748b; line-height: 1.4; }
