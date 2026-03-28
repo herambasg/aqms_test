@@ -19,9 +19,8 @@ const InfoSlide = () => {
           <h3>Our Sensor Node</h3>
           <div className="sensor-content">
             <div className="sensor-dual-images">
-              {/* 9:16 Aspect Ratio Images */}
               <div className="sensor-image-wrapper">
-                <img src={Node_1} alt="IoT Node Exterior" />
+                <img src={Node_1} alt="Node Exterior" />
               </div>
               <div className="sensor-image-wrapper">
                 <img src={Node_2} alt="Node Placement" />
@@ -29,10 +28,7 @@ const InfoSlide = () => {
             </div>
             <div className="sensor-description">
               <p>
-                Our air quality monitoring station is located in the <strong>1st Floor Lobby</strong>, 
-                positioned to face outdoors for accurate readings. The system is custom-built 
-                to run 24/7 with a constant power supply and a stable internet connection 
-                for real-time data updates.
+                Located in the <strong>1st Floor Lobby</strong> and facing outdoors, this custom-built Air Quality Monitoring Station runs 24/7 with constant power and internet for real-time air quality updates.
               </p>
             </div>
           </div>
